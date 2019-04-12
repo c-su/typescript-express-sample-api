@@ -1,11 +1,16 @@
 import * as express from 'express';
+import HelloWorld from './HelloWorld';
+
 
 const app = express();
 const port = 3000;
 
-app.get('/', (req: express.Request, res: express.Response) => res.json({
-  status: 200,
-  response: 'Hello World'
-}));
+app.get('/', (req: express.Request, res: express.Response) => {
+  const hello = new HelloWorld('test', 'test');
+  res.json({
+    status: 200,
+    response: hello.getName(),
+  });
+});
 
 app.listen(port, () => console.log(`Example app listening port ${port}`));
