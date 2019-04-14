@@ -1,6 +1,6 @@
 {
   "type": "sqlite",
-  "database": "../test.sqlite",
+  "database": "./test.sqlite",
   "entities": ["src/entities/*.ts"],
   "migrations": ["src/migrations/*.ts"],
   "cli": {
