@@ -1,4 +1,3 @@
-
 export default class HelloWorld {
   private full: string;
   constructor(public first: string, public last: string) {
