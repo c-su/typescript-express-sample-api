@@ -10,8 +10,8 @@
     "commit": "git-cz"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "ymoriyam",
+  "license": "MIT",
   "devDependencies": {
     "@types/express": "^4.16.1",
     "@types/node": "^11.13.4",
