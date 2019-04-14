@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./src/index.ts",
     "lint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts'",
+    "migration:generate": "ts-node $(npm bin)/typeorm migration:generate",
+    "migration:run": "ts-node $(npm bin)/typeorm migration:run",
     "commit": "git-cz"
   },
   "keywords": [],
@@ -29,7 +31,10 @@
     "typesync": "^0.5.1"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^4.0.6",
+    "typeorm": "^0.2.16"
   },
   "husky": {
     "hooks": {
