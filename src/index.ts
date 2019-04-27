@@ -6,18 +6,100 @@ import { User } from "./entities/user";
 const app = express();
 const port = 3000;
 
-app.get("/", async (_, res: Response, next: NextFunction) => {
+app.get("/insert", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const connection = await createConnection();
     const userRepository = connection.getRepository(User);
-
-    const user = new User("a", "a", "a", 3.0);
-    await userRepository.save(user);
-
-    res.json({
+    const response = {
       status: 200,
       response: "ok"
-    });
+    };
+    const name = req.query.name || "";
+    const desc = req.query.desc || "";
+    const file = req.query.file || "";
+
+    const user = new User(name, desc, file, 3.0);
+    await userRepository.save(user);
+
+    connection.close();
+    res.json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get("/update", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const connection = await createConnection();
+    const userRepository = connection.getRepository(User);
+    const response = {
+      status: 200,
+      response: "ok"
+    };
+
+    const user = await userRepository.findOne(req.query.id);
+    if (typeof user === "undefined") {
+      response.status = 404;
+      response.response = "not found";
+    } else {
+      user.name = req.query.name || "";
+      await userRepository.save(user);
+    }
+
+    connection.close();
+    res.json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get("/delete", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const connection = await createConnection();
+    const userRepository = connection.getRepository(User);
+    const response = {
+      status: 200,
+      response: "ok"
+    };
+
+    const user = await userRepository.findOne(req.query.id);
+    if (typeof user === "undefined") {
+      response.status = 404;
+      response.response = "not found";
+    } else {
+      await userRepository.remove(user);
+    }
+
+    connection.close();
+    res.json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get("/select", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const connection = await createConnection();
+    const userRepository = connection.getRepository(User);
+    const response = {
+      status: 200,
+      response: {}
+    };
+
+    const user = await userRepository.findOne(req.query.id);
+    if (typeof user === "undefined") {
+      response.status = 404;
+      response.response = "not found";
+    } else {
+      response.response = {
+        name: user.name,
+        desc: user.description,
+        views: user.views
+      };
+    }
+
+    connection.close();
+    res.json(response);
   } catch (err) {
     next(err);
   }
