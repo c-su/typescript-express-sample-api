@@ -1,29 +1,31 @@
 import "reflect-metadata";
-import express from "express";
-import { ConnectionOptions, createConnection } from "typeorm";
+import express, { Request, Response, NextFunction } from "express";
+import { createConnection } from "typeorm";
 import { User } from "./entities/user";
-
-const options: ConnectionOptions = {
-  type: "sqlite",
-  database: "../test.sqlite",
-  entities: [User],
-  logging: true
-};
 
 const app = express();
 const port = 3000;
 
-app.get("/", async (_, res: express.Response) => {
-  const connection = await createConnection(options);
-  const userRepository = connection.getRepository(User);
+app.get("/", async (_, res: Response, next: NextFunction) => {
+  try {
+    const connection = await createConnection();
+    const userRepository = connection.getRepository(User);
 
-  const user = new User("a", "a", "a", 3.0);
-  await userRepository.save(user);
+    const user = new User("a", "a", "a", 3.0);
+    await userRepository.save(user);
 
-  res.json({
-    status: 200,
-    response: "ok"
-  });
+    res.json({
+      status: 200,
+      response: "ok"
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
+  console.log("err handler");
+  console.log(err);
 });
 
 app.listen(port, () => console.log(`Example app listening port ${port}`));

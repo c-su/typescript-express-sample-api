@@ -1,6 +1,9 @@
 {
-  "type": "sqlite",
-  "database": "./test.sqlite",
+  "type": "mysql",
+  "host": "localhost",
+  "username": "test",
+  "password": "test",
+  "database": "test",
   "entities": ["src/entities/*.ts"],
   "migrations": ["src/migrations/*.ts"],
   "cli": {
