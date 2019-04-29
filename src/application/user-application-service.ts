@@ -1,4 +1,5 @@
 import { IUserRepository } from "../domain/repository/i-user-repository";
+import { UserFactory } from "../domain/factory/user-factory";
 
 export class UserApplicationService {
   repository: IUserRepository;
@@ -7,12 +8,11 @@ export class UserApplicationService {
     this.repository = repository;
   }
 
-  async createUser(n: string, d: string, f: string): Promise<boolean> {
+  async createUser(name: string, desc: string, file: string): Promise<boolean> {
     try {
-      const name = n || "";
-      const desc = d || "";
-      const file = f || "";
-      return this.repository.createUser(name, desc, file);
+      const factory = new UserFactory();
+      const user = factory.createUser(name, desc, file);
+      return this.repository.saveUser(user);
     } catch (err) {
       throw err;
     }

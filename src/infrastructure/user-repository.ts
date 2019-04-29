@@ -8,10 +8,9 @@ export class UserRepository extends BaseRepository<User>
     super(entityName);
   }
 
-  async createUser(name: string, desc: string, file: string): Promise<boolean> {
+  async saveUser(user: User): Promise<boolean> {
     try {
       await this.getRepository();
-      const user = new User(name, desc, file, 3.0);
       await this.repository.save(user);
       return true;
     } catch (err) {
