@@ -17,7 +17,7 @@
     "commit": "git-cz"
   },
   "keywords": [],
-  "author": "ymoriyam",
+  "author": "c-su",
   "license": "MIT",
   "devDependencies": {
     "@types/express": "^4.16.1",
