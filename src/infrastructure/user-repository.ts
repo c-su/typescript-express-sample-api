@@ -46,20 +46,4 @@ export class UserRepository extends BaseRepository<User>
       await this.closeConnection();
     }
   }
-
-  async updateUserById(id: number, name: string): Promise<boolean> {
-    try {
-      await this.getRepository();
-
-      const user = await this.repository.findOne(id);
-      if (typeof user === "undefined") return false;
-      user.name = name || "";
-      await this.repository.save(user);
-      return true;
-    } catch (err) {
-      throw err;
-    } finally {
-      await this.closeConnection();
-    }
-  }
 }

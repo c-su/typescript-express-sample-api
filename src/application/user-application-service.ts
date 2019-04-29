@@ -20,7 +20,12 @@ export class UserApplicationService {
 
   async updateUser(id: number, name: string): Promise<boolean> {
     try {
-      return await this.repository.updateUserById(id, name);
+      const user = await this.repository.findUserById(id);
+      if (typeof user === "undefined") return false;
+
+      user.name = name;
+
+      return await this.repository.saveUser(user);
     } catch (err) {
       throw err;
     }
