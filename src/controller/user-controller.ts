@@ -1,16 +1,14 @@
 import { NextFunction, Response, Request } from "express";
 import { UserApplicationService } from "../application/user-application-service";
+import { UserRepository } from "../infrastructure/user-repository";
 
 export class UserController {
-  applicationService: UserApplicationService;
-
-  constructor(service: UserApplicationService) {
-    this.applicationService = service;
-  }
-
   async createHandler(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.applicationService.createUser(
+      const applicationService = new UserApplicationService(
+        new UserRepository("User")
+      );
+      await applicationService.createUser(
         req.query.name,
         req.query.desc,
         req.query.file
@@ -32,7 +30,10 @@ export class UserController {
         response: "ok"
       };
 
-      const isUpdated = await this.applicationService.updateUser(
+      const applicationService = new UserApplicationService(
+        new UserRepository("User")
+      );
+      const isUpdated = await applicationService.updateUser(
         req.query.id,
         req.query.name
       );
@@ -54,7 +55,10 @@ export class UserController {
         response: "ok"
       };
 
-      const isDeleted = await this.applicationService.removeUser(req.query.id);
+      const applicationService = new UserApplicationService(
+        new UserRepository("User")
+      );
+      const isDeleted = await applicationService.removeUser(req.query.id);
       if (!isDeleted) {
         response.status = 404;
         response.response = "not found";
@@ -66,16 +70,20 @@ export class UserController {
     }
   }
 
-  async findHandler(req: Request, res: Response, next: NextFunction) {
+  findHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = {
         status: 200,
         response: {}
       };
-      response.response = await this.applicationService.findUser(req.query.id);
+
+      const applicationService = new UserApplicationService(
+        new UserRepository("User")
+      );
+      response.response = await applicationService.findUser(req.query.id);
       res.json(response);
     } catch (err) {
       next(err);
     }
-  }
+  };
 }

@@ -12,11 +12,11 @@ export class UserRepository extends BaseRepository<User>
     try {
       await this.getRepository();
       await this.repository.save(user);
+      await this.closeConnection();
       return true;
     } catch (err) {
       throw err;
     } finally {
-      await this.closeConnection();
     }
   }
 
@@ -24,11 +24,10 @@ export class UserRepository extends BaseRepository<User>
     try {
       await this.getRepository();
       const user = await this.repository.findOne(id);
+      await this.closeConnection();
       return user;
     } catch (err) {
       throw err;
-    } finally {
-      await this.closeConnection();
     }
   }
 
@@ -36,11 +35,10 @@ export class UserRepository extends BaseRepository<User>
     try {
       await this.getRepository();
       await this.repository.remove(user);
+      await this.closeConnection();
       return true;
     } catch (err) {
       throw err;
-    } finally {
-      await this.closeConnection();
     }
   }
 }
