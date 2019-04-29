@@ -1,5 +1,6 @@
 import { createConnection } from "typeorm";
-import { User } from "../entities/user";
+import { User } from "../domain/entity/user";
+import { UserRepository } from "../infrastructure/user-repository";
 
 export const insertUser = async (
   n: string,
@@ -29,7 +30,6 @@ export const updateUser = async (
   try {
     const connection = await createConnection();
     const userRepository = connection.getRepository(User);
-
     const user = await userRepository.findOne(id);
     if (typeof user === "undefined") return false;
 
@@ -45,11 +45,8 @@ export const updateUser = async (
 
 export const selectUser = async (id: number): Promise<object> => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
-    const user = await userRepository.findOne(id);
-    connection.close();
-
+    const userRepository = new UserRepository("User");
+    const user = await userRepository.findUserById(id);
     if (typeof user === "undefined") return {};
     return {
       name: user.name,

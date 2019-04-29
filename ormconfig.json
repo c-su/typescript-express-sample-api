@@ -4,10 +4,10 @@
   "username": "test",
   "password": "test",
   "database": "test",
-  "entities": ["src/entities/*.ts"],
+  "entities": ["src/domain/entity/*.ts"],
   "migrations": ["src/migrations/*.ts"],
   "cli": {
-    "entitiesDir": "src/entities",
+    "entitiesDir": "src/domain/entity",
     "migrationsDir": "src/migrations"
   },
   "logging": true
