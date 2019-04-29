@@ -47,7 +47,9 @@ export class UserApplicationService {
 
   async removeUser(id: number) {
     try {
-      return await this.repository.removeUserById(id);
+      const user = await this.repository.findUserById(id);
+      if (typeof user === "undefined") return false;
+      return await this.repository.removeUser(user);
     } catch (err) {
       throw err;
     }

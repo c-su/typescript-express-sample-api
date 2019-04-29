@@ -32,12 +32,9 @@ export class UserRepository extends BaseRepository<User>
     }
   }
 
-  async removeUserById(id: number): Promise<boolean> {
+  async removeUser(user: User): Promise<boolean> {
     try {
       await this.getRepository();
-
-      const user = await this.repository.findOne(id);
-      if (typeof user === "undefined") return false;
       await this.repository.remove(user);
       return true;
     } catch (err) {
