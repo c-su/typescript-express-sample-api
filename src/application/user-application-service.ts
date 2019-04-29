@@ -1,5 +1,3 @@
-import { createConnection } from "typeorm";
-import { User } from "../domain/entity/user";
 import { UserRepository } from "../infrastructure/user-repository";
 
 export const insertUser = async (
@@ -11,13 +9,8 @@ export const insertUser = async (
     const name = n || "";
     const desc = d || "";
     const file = f || "";
-    const user = new User(name, desc, file, 3.0);
-
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
-    await userRepository.save(user);
-    connection.close();
-    return true;
+    const userRepository = new UserRepository("User");
+    return userRepository.createUser(name, desc, file);
   } catch (err) {
     throw err;
   }
@@ -28,16 +21,8 @@ export const updateUser = async (
   name: string
 ): Promise<boolean> => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
-    const user = await userRepository.findOne(id);
-    if (typeof user === "undefined") return false;
-
-    user.name = name || "";
-    await userRepository.save(user);
-
-    connection.close();
-    return true;
+    const userRepository = new UserRepository("User");
+    return await userRepository.updateUserById(id, name);
   } catch (err) {
     throw err;
   }
@@ -59,14 +44,8 @@ export const selectUser = async (id: number): Promise<object> => {
 };
 export const deleteUser = async (id: number) => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
-    const user = await userRepository.findOne(id);
-    if (typeof user === "undefined") return false;
-
-    await userRepository.remove(user);
-    connection.close();
-    return true;
+    const userRepository = new UserRepository("User");
+    return await userRepository.removeUserById(id);
   } catch (err) {
     throw err;
   }
