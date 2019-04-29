@@ -8,9 +8,9 @@ const userController = new UserController(
   new UserApplicationService(new UserRepository("User"))
 );
 
-router.get("/insert", userController.insertHandler);
+router.get("/create", userController.createHandler);
 router.get("/update", userController.updateHandler);
-router.get("/delete", userController.deleteHandler);
-router.get("/select", userController.selectHandler);
+router.get("/remove", userController.removeHandler);
+router.get("/find", userController.findHandler);
 
 export { router as UserRouter };

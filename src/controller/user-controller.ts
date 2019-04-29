@@ -8,9 +8,9 @@ export class UserController {
     this.applicationService = service;
   }
 
-  async insertHandler(req: Request, res: Response, next: NextFunction) {
+  async createHandler(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.applicationService.insertUser(
+      await this.applicationService.createUser(
         req.query.name,
         req.query.desc,
         req.query.file
@@ -47,14 +47,14 @@ export class UserController {
     }
   }
 
-  async deleteHandler(req: Request, res: Response, next: NextFunction) {
+  async removeHandler(req: Request, res: Response, next: NextFunction) {
     try {
       const response = {
         status: 200,
         response: "ok"
       };
 
-      const isDeleted = await this.applicationService.deleteUser(req.query.id);
+      const isDeleted = await this.applicationService.removeUser(req.query.id);
       if (!isDeleted) {
         response.status = 404;
         response.response = "not found";
@@ -66,15 +66,13 @@ export class UserController {
     }
   }
 
-  async selectHandler(req: Request, res: Response, next: NextFunction) {
+  async findHandler(req: Request, res: Response, next: NextFunction) {
     try {
       const response = {
         status: 200,
         response: {}
       };
-      response.response = await this.applicationService.selectUser(
-        req.query.id
-      );
+      response.response = await this.applicationService.findUser(req.query.id);
       res.json(response);
     } catch (err) {
       next(err);

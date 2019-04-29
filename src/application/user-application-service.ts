@@ -7,7 +7,7 @@ export class UserApplicationService {
     this.repository = repository;
   }
 
-  async insertUser(n: string, d: string, f: string): Promise<boolean> {
+  async createUser(n: string, d: string, f: string): Promise<boolean> {
     try {
       const name = n || "";
       const desc = d || "";
@@ -26,7 +26,7 @@ export class UserApplicationService {
     }
   }
 
-  async selectUser(id: number): Promise<object> {
+  async findUser(id: number): Promise<object> {
     try {
       const user = await this.repository.findUserById(id);
       if (typeof user === "undefined") return {};
@@ -40,7 +40,7 @@ export class UserApplicationService {
     }
   }
 
-  async deleteUser(id: number) {
+  async removeUser(id: number) {
     try {
       return await this.repository.removeUserById(id);
     } catch (err) {
