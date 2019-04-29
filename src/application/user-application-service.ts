@@ -1,7 +1,11 @@
 import { createConnection } from "typeorm";
 import { User } from "../entities/user";
 
-export const insertUser = async (n: string, d: string, f: string) => {
+export const insertUser = async (
+  n: string,
+  d: string,
+  f: string
+): Promise<boolean> => {
   try {
     const name = n || "";
     const desc = d || "";
@@ -18,7 +22,10 @@ export const insertUser = async (n: string, d: string, f: string) => {
   }
 };
 
-export const updateUser = async (id: number, name: string) => {
+export const updateUser = async (
+  id: number,
+  name: string
+): Promise<boolean> => {
   try {
     const connection = await createConnection();
     const userRepository = connection.getRepository(User);
@@ -36,7 +43,7 @@ export const updateUser = async (id: number, name: string) => {
   }
 };
 
-export const selectUser = async (id: number) => {
+export const selectUser = async (id: number): Promise<object> => {
   try {
     const connection = await createConnection();
     const userRepository = connection.getRepository(User);

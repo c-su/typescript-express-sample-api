@@ -8,7 +8,7 @@ const port = 3000;
 
 app.get("/insert", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    UserApplicationService.insertUser(
+    await UserApplicationService.insertUser(
       req.query.name,
       req.query.desc,
       req.query.file
@@ -30,7 +30,7 @@ app.get("/update", async (req: Request, res: Response, next: NextFunction) => {
       response: "ok"
     };
 
-    const isUpdated = UserApplicationService.updateUser(
+    const isUpdated = await UserApplicationService.updateUser(
       req.query.id,
       req.query.name
     );
@@ -52,7 +52,7 @@ app.get("/delete", async (req: Request, res: Response, next: NextFunction) => {
       response: "ok"
     };
 
-    const isDeleted = UserApplicationService.deleteUser(req.query.id);
+    const isDeleted = await UserApplicationService.deleteUser(req.query.id);
     if (!isDeleted) {
       response.status = 404;
       response.response = "not found";
@@ -70,7 +70,7 @@ app.get("/select", async (req: Request, res: Response, next: NextFunction) => {
       status: 200,
       response: {}
     };
-    response.response = UserApplicationService.selectUser(req.query.id);
+    response.response = await UserApplicationService.selectUser(req.query.id);
     res.json(response);
   } catch (err) {
     next(err);
