@@ -1,5 +1,5 @@
 {
-  "name": "typescript-express",
+  "name": "typescript-express-sample-api",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
