@@ -1,28 +1,23 @@
 import "reflect-metadata";
 import express, { Request, Response, NextFunction } from "express";
-import { createConnection } from "typeorm";
-import { User } from "./entities/user";
+
+import * as UserApplicationService from "./application/user-application-service";
 
 const app = express();
 const port = 3000;
 
 app.get("/insert", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
-    const response = {
+    UserApplicationService.insertUser(
+      req.query.name,
+      req.query.desc,
+      req.query.file
+    );
+
+    res.json({
       status: 200,
       response: "ok"
-    };
-    const name = req.query.name || "";
-    const desc = req.query.desc || "";
-    const file = req.query.file || "";
-
-    const user = new User(name, desc, file, 3.0);
-    await userRepository.save(user);
-
-    connection.close();
-    res.json(response);
+    });
   } catch (err) {
     next(err);
   }
@@ -30,23 +25,20 @@ app.get("/insert", async (req: Request, res: Response, next: NextFunction) => {
 
 app.get("/update", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
     const response = {
       status: 200,
       response: "ok"
     };
 
-    const user = await userRepository.findOne(req.query.id);
-    if (typeof user === "undefined") {
+    const isUpdated = UserApplicationService.updateUser(
+      req.query.id,
+      req.query.name
+    );
+
+    if (!isUpdated) {
       response.status = 404;
       response.response = "not found";
-    } else {
-      user.name = req.query.name || "";
-      await userRepository.save(user);
     }
-
-    connection.close();
     res.json(response);
   } catch (err) {
     next(err);
@@ -55,22 +47,17 @@ app.get("/update", async (req: Request, res: Response, next: NextFunction) => {
 
 app.get("/delete", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
     const response = {
       status: 200,
       response: "ok"
     };
 
-    const user = await userRepository.findOne(req.query.id);
-    if (typeof user === "undefined") {
+    const isDeleted = UserApplicationService.deleteUser(req.query.id);
+    if (!isDeleted) {
       response.status = 404;
       response.response = "not found";
-    } else {
-      await userRepository.remove(user);
     }
 
-    connection.close();
     res.json(response);
   } catch (err) {
     next(err);
@@ -79,26 +66,11 @@ app.get("/delete", async (req: Request, res: Response, next: NextFunction) => {
 
 app.get("/select", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const connection = await createConnection();
-    const userRepository = connection.getRepository(User);
     const response = {
       status: 200,
       response: {}
     };
-
-    const user = await userRepository.findOne(req.query.id);
-    if (typeof user === "undefined") {
-      response.status = 404;
-      response.response = "not found";
-    } else {
-      response.response = {
-        name: user.name,
-        desc: user.description,
-        views: user.views
-      };
-    }
-
-    connection.close();
+    response.response = UserApplicationService.selectUser(req.query.id);
     res.json(response);
   } catch (err) {
     next(err);
